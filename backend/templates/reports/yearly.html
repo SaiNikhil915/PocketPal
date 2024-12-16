@@ -3,195 +3,126 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Yearly Expense Dashboard</title>
+    <title>Yearly Expense Analysis</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #4361ee;
-            --sidebar-width: 250px;
-        }
-        
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            min-height: 100vh;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 20px;
         }
-
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-color), #3a0ca3) !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 40px;
         }
-
-        .sidebar {
-            background: #2b2d42 !important;
-            min-height: calc(100vh - 56px);
-            width: var(--sidebar-width);
-            transition: all 0.3s;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        .chart-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
         }
-
-        .nav-link {
-            padding: 0.8rem 1rem;
-            color: #e9ecef !important;
-            transition: all 0.3s;
-            border-radius: 0.25rem;
-            margin: 0.2rem 0.5rem;
+        .summary-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
         }
-
-        .nav-link:hover {
-            background-color: rgba(255,255,255,0.1);
-            transform: translateX(5px);
-        }
-
-        .nav-link.active {
-            background-color: var(--primary-color);
-            color: white !important;
-        }
-
-        .card {
-            border-radius: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, var(--primary-color), #3a0ca3);
-            color: white !important;
-            border-top-left-radius: 1rem;
-            border-top-right-radius: 1rem;
-        }
-        .text-muted.fs-5 {
-            font-size: 1.5rem !important;
+        .summary-item {
             text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            width: 48%;
         }
-                            
-        .text-danger.fw-bold,
-        .text-success.fw-bold {
-                font-size: 3.5rem !important;
-                font-weight: 700 !important;
+        .summary-item h3 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        .summary-item .h2 {
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .summary-item small {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .back-btn i {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+        .back-btn span {
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <i class="fas fa-wallet me-2"></i>Expense Tracker
-            </a>
-            <div class="ms-auto">
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle fa-fw fa-lg"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/logout.html"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
+    <a href="{% url 'index' %}" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back to Home</span>
+    </a>
+    <div class="container">
+        <div class="chart-container">
+            <canvas id="yearlyExpenseChart"></canvas>
+        </div>
+        <div class="summary-container">
+            <div class="summary-item">
+                <h3>Total Yearly Expense</h3>
+                <p id="total-yearly-expense" class="h2">Rs 12,150.00</p>
+                <small>Highest Month: November (Rs 1,250)</small>
+            </div>
+            <div class="summary-item">
+                <h3>Monthly Average</h3>
+                <p id="monthly-average" class="h2">Rs 1,012.50</p>
+                <small>Expense Trend: Increasing</small>
             </div>
         </div>
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
-                <div class="position-sticky pt-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.html">
-                                <i class="fas fa-home me-2"></i>Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="profile.html">
-                                <i class="fas fa-user me-2"></i>Profile
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#recordSubmenu" data-bs-toggle="collapse">
-                                <i class="fas fa-chart-line me-2"></i>Records
-                                <i class="fas fa-chevron-down float-end mt-1"></i>
-                            </a>
-                            <div class="collapse show" id="recordSubmenu">
-                                <ul class="nav flex-column ms-3">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="weekly.html">Weekly</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="monthly.html">Monthly</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="yearly.html">Yearly</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="history.html">
-                                <i class="fas fa-history me-2"></i>History
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-                <h1 class="mb-4"><i class="fas fa-chart-line me-2"></i>Yearly Expense</h1>
-
-                <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <i class="fas fa-chart-line me-2"></i>Yearly Expense Chart
-                            </div>
-                            <div class="card-body">
-                                <canvas id="yearlyExpenseChart" class="w-100"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <i class="fas fa-wallet me-2"></i>Yearly Summary
-                            </div>
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="d-flex flex-column align-items-end">
-                                        <span class="text-muted fs-5">Spent this Week:</span>
-                                        <h2 class="text-danger fw-bold">Rs<span id="amount-spent-this-week"> 200.00</span></h2>
-                                    </div>
-                                    <div class="d-flex flex-column align-items-end">
-                                        <span class="text-muted fs-5">Saved this Week:</span>
-                                        <h2 class="text-success fw-bold">Rs<span id="amount-saved-this-week"> 50.00</span></h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script>
+        var yearlyExpenseData = [850, 920, 780, 1100, 950, 1050, 900, 1200, 1050, 900, 1250, 1150];
+        var yearlyExpenseLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
         var ctx = document.getElementById('yearlyExpenseChart').getContext('2d');
         var chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: yearlyExpenseLabels,
                 datasets: [{
                     label: 'Monthly Expenses',
-                    data: [850, 920, 780, 1100, 950, 1050, 900, 1200, 1050, 900, 1250, 1150],
-                    borderColor: 'rgba(54, 162, 235, 0.8)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    tension: 0.1
+                    data: yearlyExpenseData,
+                    borderColor: 'rgba(255, 255, 255, 0.8)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    fill: true,
+                    tension: 0.4
                 }]
             },
             options: {
@@ -199,16 +130,47 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Yearly Expense Trend'
+                        text: 'Yearly Expense Trend',
+                        color: '#ffffff'
+                    },
+                    legend: {
+                        display: false
                     }
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Amount (Rs)',
+                            color: '#ffffff'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Months',
+                            color: '#ffffff'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)'
+                        }
                     }
                 }
             }
         });
+        // Additional calculations
+        document.getElementById('total-yearly-expense').textContent = `Rs ${yearlyExpenseData.reduce((a, b) => a + b, 0).toFixed(2)}`;
+        document.getElementById('monthly-average').textContent = `Rs ${(yearlyExpenseData.reduce((a, b) => a + b, 0) / yearlyExpenseData.length).toFixed(2)}`;
     </script>
 </body>
 </html>

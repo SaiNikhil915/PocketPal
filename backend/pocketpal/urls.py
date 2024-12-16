@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),  # Transactions routes
     path('transactions/', include('transactions.urls')),
-    path('dashboard/', include('dashboard.urls'), name="dashboard"),  # Prefix for dashboard app
-
+    path('dashboard/', include('dashboard.urls'), name="dashboard"),
+    path("reports/", include("reports.urls")), 
 ]
       
