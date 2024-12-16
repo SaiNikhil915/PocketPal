@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PocketPal - User Profile</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+
+        }
+        .profile-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-top: 170px;
+        }
+        .profile-header {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            display: block;
+        }
+        .file-upload {
+            position: relative;
+            width: 200px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .file-upload input[type=file] {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .profile-details .row {
+            margin-bottom: 10px;
+        }
+        .profile-details label {
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-10 ">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <h2 class="mb-0">
+                            <i class="fas fa-user-circle me-2"></i>User Profile
+                        </h2>
+                    </div>
+                    <div class="container py-4">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="profile-head mb-4">
+                                    <h4>User Name</h4>
+                                    <h6 class="text-muted">User Profession</h6>
+                                    
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                                                <i class="fas fa-info-circle me-2"></i>About
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="profile-details">
+                                    <div class="tab-content" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                            <div class="row">
+                                                <div class="col-6"><label>User Id</label></div>
+                                                <div class="col-6">User ID</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6"><label>Email</label></div>
+                                                <div class="col-6">User Email</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6"><label>Savings</label></div>
+                                                <div class="col-6">User Savings</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6"><label>Income</label></div>
+                                                <div class="col-6">User Income</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

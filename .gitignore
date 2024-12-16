@@ -1,0 +1,32 @@
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore virtual environment
+env/
+venv/
+
+# Ignore log files
+*.log
+
+# Ignore compiled files
+*.py[cod]
+
+# Ignore static and media files (if applicable)
+static/
+media/
+
+# Ignore environment variables and secrets
+.env
+
+# Ignore npm or yarn packages (if applicable)
+node_modules/
+
+# Ignore migrations (optional, if you don’t want to track them)
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Ignore database backups or exports
+*.sql
+*.dump
+*.backup
