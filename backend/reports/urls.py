@@ -5,4 +5,9 @@ urlpatterns = [
     path("weekly/", views.weekly_report, name="weekly"),
     path("monthly/", views.monthly_report, name="monthly"),
     path("yearly/", views.yearly_report, name="yearly"),
+
+    path('weekly/', views.weekly_report, name='weekly_report'),
+    path('monthly/', views.monthly_expenses, name='monthly_expenses'),
+    path('history/', views.history, name='history'),
 ]
+
