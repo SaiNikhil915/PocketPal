@@ -39,10 +39,6 @@ def register_view(request):
 
     return render(request, 'users/register.html')
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth.models import User
-
 def handle_signup(request):
     if request.method == "POST":
         uname = request.POST['uname']
@@ -55,30 +51,29 @@ def handle_signup(request):
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
 
-        # Check for errors
+        # Check for password confirmation error
         if pass1 != pass2:
             messages.error(request, "Passwords do not match!")
             return redirect("register")
 
-        # Create user
+        # Create the user
         try:
             user = User.objects.create_user(username=uname, email=email, password=pass1)
             user.first_name = fname
             user.last_name = lname
             user.save()
 
-            # Add additional fields if necessary
-            # (This assumes you have a custom user model or a related profile model)
+            # Show success message
+            messages.success(request, "Account created successfully! Please login.")
+            
+            # Redirect to login page
+            return redirect("login")
 
-            # Show success message in modal
-            messages.success(request, "Account created successfully!")
-            return render(request, "register.html", {"redirect_to_login": True})
         except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
             return redirect("register")
     else:
         return redirect("register")
-
-    
 
 
 def handle_login(request):

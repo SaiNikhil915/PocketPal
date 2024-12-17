@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from transactions.models import Transaction
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
 
 
 def weekly_report(request):
@@ -16,6 +18,58 @@ def yearly_report(request):
 
 def history(request):
     return render(request, 'reports/history.html')
+
+def history(request):
+    transactions = Transaction.objects.filter(user=request.user).order_by('-transaction_date')
+    return render(request, 'reports/history.html', {'transactions': transactions})
+
+def output(request):
+    transactions = Transaction.objects.filter(user=request.user).order_by('-transaction_date')
+    return render(request, 'reports/output.html', {'transactions': transactions})
+
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+
+def history(request):
+    # Fetch all transactions for the table
+    transactions = Transaction.objects.filter(user=request.user).order_by('-transaction_date')
+
+    # Aggregate expenses grouped by category for the pie chart
+    expense_data = (
+        Transaction.objects
+        .filter(user=request.user, transaction_type='Expense')
+        .values('category')
+        .annotate(total_amount=Sum('amount'))
+        .order_by('-total_amount')
+    )
+
+    # Aggregate expenses by month for the line chart
+    monthly_expenses = (
+        Transaction.objects
+        .filter(user=request.user, transaction_type='Expense')
+        .annotate(month=TruncMonth('transaction_date'))
+        .values('month')
+        .annotate(total_amount=Sum('amount'))
+        .order_by('month')
+    )
+
+    # Prepare data for the charts
+    categories = [item['category'] for item in expense_data]  # Labels for pie chart
+    amounts = [float(item['total_amount']) for item in expense_data]  # Data for pie chart
+
+    months = [item['month'].strftime('%b %Y') for item in monthly_expenses]  # X-axis labels (e.g., Jan 2024)
+    monthly_amounts = [float(item['total_amount']) for item in monthly_expenses]  # Y-axis data (expense totals)
+
+    context = {
+        'transactions': transactions,  # For the table
+        'categories': categories,      # For pie chart labels
+        'amounts': amounts,            # For pie chart data
+        'months': months,              # For line chart labels
+        'monthly_amounts': monthly_amounts  # For line chart data
+    }
+
+    return render(request, 'reports/history.html', context)
+
 
 
 @login_required
